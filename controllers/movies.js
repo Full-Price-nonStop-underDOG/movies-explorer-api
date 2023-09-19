@@ -11,7 +11,7 @@ module.exports.getToken = (req) => {
 };
 module.exports.getCurrentUserMovies = (req, res, next) => {
   const payload = jwt.decode(this.getToken(req));
-  Movie.find({ owner: payload._id }) // Фильтрация фильмов по owner
+  Movie.find({ owner: payload._id }) // Фильтрация фильмовпо owner
     .then((movies) => {
       res.json(movies);
     })
@@ -54,8 +54,8 @@ module.exports.createMovie = (req, res, next) => {
       if (error.name === 'ValidationError') {
         return next(
           new InvalidRequst(
-            'Переданы некорректные данные при создании карточки',
-          ),
+            'Переданы некорректные данные при создании карточки'
+          )
         );
       }
       return next(error);
