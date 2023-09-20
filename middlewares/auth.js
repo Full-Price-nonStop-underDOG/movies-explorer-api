@@ -2,7 +2,9 @@ const jwt = require('jsonwebtoken');
 
 const TokenInvalidError = require('../errors/tokenInvalidError');
 
-const jwtSecret = process.env.JWT_SECRET || 'my_darling_is_over_the_ocean';
+const jwtSecret = process.env.NODE_ENV === 'production'
+  ? process.env.JWT_SECRET
+  : 'my_darling_is_over_the_ocean';
 
 module.exports = (req, res, next) => {
   const { token: cookieToken } = req.cookies;

@@ -4,12 +4,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
 const authMiddleware = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./logger');
 const { login, createUser } = require('./controllers/users');
+const errorHandler = require('./middlewares/errorHandler');
+const limiter = require('./middlewares/rateLimiter');
 
 const app = express();
 
@@ -23,13 +26,18 @@ app.use(
   }),
 );
 
+app.use(helmet());
+app.disable('x-powered-by');
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
-  useNewUrlParser: true,
-});
+mongoose.connect(
+  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/bitfilmsdb',
+  {
+    useNewUrlParser: true,
+  },
+);
 
 app.listen(3001, () => {});
 
@@ -68,6 +76,7 @@ userRouter.post(
   createUser,
 );
 
+app.use(limiter);
 app.use(errorLogger);
 app.use(errors());
 
@@ -77,15 +86,4 @@ app.use('*', (req, res, next) => {
   next(err);
 });
 
-app.use((err, req, res, next) => {
-  // этот next обязательно оставлять, мне сказал так преподователь)
-  // без него ломаются ошибки, потому что без next app.use перестает быть мидлваром
-  // Отправляем ошибку клиенту
-
-  const statusCode = err.statusCode || 500;
-  const message = statusCode === 500
-    ? `На сервере произошла ошибка: ${err.message}`
-    : err.message;
-
-  res.status(statusCode).json({ message });
-});
+app.use(errorHandler);

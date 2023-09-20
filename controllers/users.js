@@ -7,7 +7,9 @@ const NoDataError = require('../errors/noDataError');
 const ServerConflictError = require('../errors/serverConflictError');
 const TokenInvalidError = require('../errors/tokenInvalidError');
 
-const jwtSecret = process.env.JWT_SECRET || 'my_darling_is_over_the_ocean';
+const jwtSecret = process.env.NODE_ENV === 'production'
+  ? process.env.JWT_SECRET
+  : 'my_darling_is_over_the_ocean';
 
 module.exports.getToken = (req) => {
   const { token: cookieToken } = req.cookies;
