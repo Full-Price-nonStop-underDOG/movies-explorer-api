@@ -122,3 +122,9 @@ module.exports.login = async (req, res, next) => {
     return next(error);
   }
 };
+
+module.exports.signout = (req, res) => {
+  // Очистите куку с токеном
+  res.clearCookie('token');
+  res.status(200).json({ message: 'Signout successful' });
+};

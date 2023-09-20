@@ -78,7 +78,10 @@ app.use('*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  // этот next обязательно оставлять, мне сказал так преподователь)
+  // без него ломаются ошибки, потому что без next app.use перестает быть мидлваром
   // Отправляем ошибку клиенту
+
   const statusCode = err.statusCode || 500;
   const message = statusCode === 500
     ? `На сервере произошла ошибка: ${err.message}`

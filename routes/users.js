@@ -1,11 +1,16 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 
-const { getCurrentUser, updateProfile } = require('../controllers/users');
+const {
+  getCurrentUser,
+  updateProfile,
+  signout,
+} = require('../controllers/users');
 
 const router = express.Router();
 
 router.get('/users/me', getCurrentUser);
+router.post('/signout', signout);
 
 router.patch(
   '/users/me',
