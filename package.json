@@ -1,0 +1,41 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "api-for-diplom-project",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "lint": "npx eslint .",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Full-Price-nonStop-underDOG/movies-explorer-api.git"
+  },
+  "author": "Son_of_cheese",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Full-Price-nonStop-underDOG/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/Full-Price-nonStop-underDOG/movies-explorer-api#readme",
+  "devDependencies": {
+    "eslint-config-airbnb-base": "^15.0.0",
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "celebrate": "^15.0.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.0.1",
+    "express-winston": "^4.2.0",
+    "helmet": "^7.0.0",
+    "joi": "^17.10.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.1",
+    "validator": "^13.11.0",
+    "winston": "^3.10.0"
+  }
+}
