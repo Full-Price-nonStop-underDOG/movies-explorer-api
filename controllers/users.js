@@ -7,9 +7,10 @@ const NoDataError = require('../errors/noDataError');
 const ServerConflictError = require('../errors/serverConflictError');
 const TokenInvalidError = require('../errors/tokenInvalidError');
 
-const jwtSecret = process.env.NODE_ENV === 'production'
-  ? process.env.JWT_SECRET
-  : 'my_darling_is_over_the_ocean';
+const jwtSecret =
+  process.env.NODE_ENV === 'production'
+    ? process.env.JWT_SECRET
+    : 'my_darling_is_over_the_ocean';
 
 module.exports.getToken = (req) => {
   const { token: cookieToken } = req.cookies;
@@ -43,7 +44,7 @@ module.exports.updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(
     payload._id,
     { name, email },
-    { new: true, runValidators: true },
+    { new: true, runValidators: true }
   )
     .then((updatedUser) => {
       if (!updatedUser) {
@@ -55,9 +56,57 @@ module.exports.updateProfile = (req, res, next) => {
       if (error.name === 'ValidationError' || error.name === 'CastError') {
         return next(
           new InvalidRequst(
-            'Переданы некорректные данные при обновлении профиля',
-          ),
+            'Переданы некорректные данные при обновлении профиля'
+          )
         );
+      }
+      return next(error);
+    });
+};
+
+module.exports.addLike = (req, res, next) => {
+  const { movieId } = req.body;
+
+  const payload = jwt.decode(this.getToken(req));
+
+  User.findByIdAndUpdate(
+    payload._id,
+    { $push: { savedMovies: movieId } }, // Используем $push для добавления movieId
+    { new: true, runValidators: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        throw new NoDataError('User not found');
+      }
+      return res.status(200).json(updatedUser);
+    })
+    .catch((error) => {
+      if (error.name === 'ValidationError' || error.name === 'CastError') {
+        return next(new InvalidRequst('Лайк уже поставлен'));
+      }
+      return next(error);
+    });
+};
+
+module.exports.removeLike = (req, res, next) => {
+  const { movieId } = req.body;
+
+  const payload = jwt.decode(this.getToken(req));
+
+  User.findByIdAndUpdate(
+    payload._id,
+    { $pull: { savedMovies: movieId } }, // Используем $pull для удаления movieId
+    { new: true, runValidators: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        throw new NoDataError('User not found');
+      }
+      return res.status(200).json(updatedUser);
+    })
+    .catch((error) => {
+      if (error.name === 'ValidationError' || error.name === 'CastError') {
+        return next(new InvalidRequst('Лайк уже удален'));
       }
       return next(error);
     });
@@ -65,17 +114,19 @@ module.exports.updateProfile = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
-
+  console.log(req.body);
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({
-      email,
-      password: hash,
-      name,
-    }))
+    .then((hash) =>
+      User.create({
+        email,
+        password: hash,
+        name,
+      })
+    )
     .then((user) => {
       const { _id } = user;
-
+      this.login(req, res, next);
       return res.status(201).send({
         email,
         name,
@@ -86,8 +137,8 @@ module.exports.createUser = (req, res, next) => {
       if (err.code === 11000) {
         next(
           new ServerConflictError(
-            'Пользователь с таким электронным адресом уже существует',
-          ),
+            'Пользователь с таким электронным адресом уже существует'
+          )
         );
       } else if (err.name === 'ValidationError') {
         // В случае ошибки валидации отправляем ошибку 400
@@ -116,7 +167,8 @@ module.exports.login = async (req, res, next) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 604800000, // 7 * 24 * 60 * 60 * 1000,
+      secure: false,
     }); // 7 days
 
     return res.json({ _id: user._id, token });

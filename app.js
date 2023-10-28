@@ -5,6 +5,7 @@ const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
+const morgan = require('morgan'); // Подключаем morgan
 
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
@@ -20,10 +21,10 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: true,
-    methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
-  }),
+    methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
+  })
 );
 
 app.use(helmet());
@@ -36,7 +37,7 @@ mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/bitfilmsdb',
   {
     useNewUrlParser: true,
-  },
+  }
 );
 
 app.listen(3001, () => {});
@@ -52,6 +53,7 @@ app.use((req, res, next) => {
 app.use(requestLogger);
 app.use(userRouter);
 app.use(movieRouter);
+app.use(morgan('dev'));
 
 userRouter.post(
   '/signin',
@@ -61,11 +63,12 @@ userRouter.post(
       password: Joi.string().required().min(6),
     }),
   }),
-  login,
+  login
 );
 
 userRouter.post(
   '/signup',
+
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
@@ -73,7 +76,7 @@ userRouter.post(
       name: Joi.string().min(2).max(30),
     }),
   }),
-  createUser,
+  createUser
 );
 
 app.use(limiter);

@@ -5,10 +5,13 @@ const {
   getCurrentUser,
   updateProfile,
   signout,
+  addLike,
+  removeLike,
 } = require('../controllers/users');
 
 const router = express.Router();
-
+router.put('/users/me', addLike);
+router.delete('/users/me', removeLike);
 router.get('/users/me', getCurrentUser);
 router.post('/signout', signout);
 
@@ -21,7 +24,7 @@ router.patch(
       authorization: Joi.string(),
     }),
   }),
-  updateProfile,
+  updateProfile
 );
 
 module.exports = router;
