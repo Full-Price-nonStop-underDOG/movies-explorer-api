@@ -5,7 +5,6 @@ const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
-const morgan = require('morgan'); // Подключаем morgan
 
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
@@ -53,7 +52,6 @@ app.use((req, res, next) => {
 app.use(requestLogger);
 app.use(userRouter);
 app.use(movieRouter);
-app.use(morgan('dev'));
 
 userRouter.post(
   '/signin',
