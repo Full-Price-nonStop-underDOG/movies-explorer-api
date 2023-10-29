@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://filmloverbtwwhynot.nomoredomainsrocks.ru',
     credentials: true,
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
   })
