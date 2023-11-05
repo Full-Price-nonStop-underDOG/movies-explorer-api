@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
 
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
@@ -39,7 +38,6 @@ app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
   res.sendStatus(200);
 });
 
-app.use(helmet());
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(bodyParser.json());
