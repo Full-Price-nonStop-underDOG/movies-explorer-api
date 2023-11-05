@@ -26,7 +26,18 @@ app.use(
   })
 );
 
-app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', cors());
+app.options('*', (req, res) => {
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
+  );
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, PUT, POST, DELETE, PATCH, PULL'
+  );
+  res.sendStatus(200);
+});
 
 app.use(helmet());
 app.disable('x-powered-by');
