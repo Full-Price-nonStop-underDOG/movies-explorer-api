@@ -25,18 +25,26 @@ app.use(
   })
 );
 
-app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
-  );
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header(
-    'Access-Control-Allow-Methods',
-    'GET, PUT, POST, DELETE, PATCH, PULL'
-  );
-  res.sendStatus(200);
-});
+// app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
+//   res.header(
+//     'Access-Control-Allow-Origin',
+//     'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
+//   );
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header(
+//     'Access-Control-Allow-Methods',
+//     'GET, PUT, POST, DELETE, PATCH, PULL'
+//   );
+//   res.sendStatus(200);
+// });
+
+// app.use(
+//   cors({
+//     origin: 'http://localhost:3000',
+//     credentials: true,
+//     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
+//   })
+// );
 
 app.disable('x-powered-by');
 app.use(express.json());
