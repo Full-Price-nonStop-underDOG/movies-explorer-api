@@ -20,11 +20,24 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: '*',
+    origin: 'https://filmloverbtwwhynot.nomoredomainsrocks.ru',
     credentials: true,
-    methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH'],
-  }),
+    methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
+  })
 );
+
+app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
+  );
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, PUT, POST, DELETE, PATCH, PULL'
+  );
+  res.sendStatus(200);
+});
 
 app.use(helmet());
 app.disable('x-powered-by');
@@ -36,7 +49,7 @@ mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/bitfilmsdb',
   {
     useNewUrlParser: true,
-  },
+  }
 );
 
 app.listen(3001, () => {});
@@ -61,11 +74,12 @@ userRouter.post(
       password: Joi.string().required().min(6),
     }),
   }),
-  login,
+  login
 );
 
 userRouter.post(
   '/signup',
+
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
@@ -73,7 +87,7 @@ userRouter.post(
       name: Joi.string().min(2).max(30),
     }),
   }),
-  createUser,
+  createUser
 );
 
 app.use(limiter);

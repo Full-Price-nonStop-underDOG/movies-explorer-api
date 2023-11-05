@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  savedMovies: {
+    type: [Number],
+    default: [],
+  },
 });
 
 module.exports = mongoose.model('user', userSchema);
