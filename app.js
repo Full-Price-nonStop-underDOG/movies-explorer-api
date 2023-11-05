@@ -26,7 +26,7 @@ app.use(
   })
 );
 
-app.options('*', (req, res) => {
+app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
   res.header(
     'Access-Control-Allow-Origin',
     'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
