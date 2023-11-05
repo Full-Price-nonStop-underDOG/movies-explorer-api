@@ -26,6 +26,8 @@ app.use(
   })
 );
 
+app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', cors());
+
 app.use(helmet());
 app.disable('x-powered-by');
 app.use(express.json());
