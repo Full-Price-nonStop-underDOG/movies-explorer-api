@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
 
 const userRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
@@ -18,28 +17,35 @@ const app = express();
 
 app.use(cookieParser());
 
+// app.use(
+//   cors({
+//     origin: 'https://filmloverbtwwhynot.nomoredomainsrocks.ru',
+//     credentials: true,
+//     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
+//   })
+// );
+
+// app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
+//   res.header(
+//     'Access-Control-Allow-Origin',
+//     'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
+//   );
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header(
+//     'Access-Control-Allow-Methods',
+//     'GET, PUT, POST, DELETE, PATCH, PULL'
+//   );
+//   res.sendStatus(200);
+// });
+
 app.use(
   cors({
-    origin: 'https://filmloverbtwwhynot.nomoredomainsrocks.ru',
+    origin: 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
   })
 );
 
-app.options('https://filmloverbtwwhynot.nomoredomainsrocks.ru', (req, res) => {
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://filmloverbtwwhynot.nomoredomainsrocks.ru'
-  );
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header(
-    'Access-Control-Allow-Methods',
-    'GET, PUT, POST, DELETE, PATCH, PULL'
-  );
-  res.sendStatus(200);
-});
-
-app.use(helmet());
 app.disable('x-powered-by');
 app.use(express.json());
 app.use(bodyParser.json());
