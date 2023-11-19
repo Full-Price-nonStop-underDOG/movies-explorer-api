@@ -19,9 +19,10 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: 'https://filmloverbtwwhynot.nomoredomainsrocks.ru',
+    origin: ['https://filmloverbtwwhynot.nomoredomainsrocks.ru'],
     credentials: true,
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'PULL'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
