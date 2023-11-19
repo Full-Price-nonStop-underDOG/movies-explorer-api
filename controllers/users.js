@@ -65,13 +65,13 @@ module.exports.updateProfile = (req, res, next) => {
 };
 
 module.exports.addLike = (req, res, next) => {
-  const { movieId } = req.body;
+  const { card } = req.body;
 
   const payload = jwt.decode(this.getToken(req));
 
   User.findByIdAndUpdate(
     payload._id,
-    { $push: { savedMovies: movieId } }, // Используем $push для добавления movieId
+    { $push: { savedMovies: card } }, // Используем $push для добавления movieId
     { new: true, runValidators: true }
   )
     .then((updatedUser) => {
@@ -81,6 +81,7 @@ module.exports.addLike = (req, res, next) => {
       return res.status(200).json(updatedUser);
     })
     .catch((error) => {
+      console.error('смотрим на ошибку', error);
       if (error.name === 'ValidationError' || error.name === 'CastError') {
         return next(new InvalidRequst('Лайк уже поставлен'));
       }
@@ -89,13 +90,13 @@ module.exports.addLike = (req, res, next) => {
 };
 
 module.exports.removeLike = (req, res, next) => {
-  const { movieId } = req.body;
+  const { card } = req.body;
 
   const payload = jwt.decode(this.getToken(req));
 
   User.findByIdAndUpdate(
     payload._id,
-    { $pull: { savedMovies: movieId } }, // Используем $pull для удаления movieId
+    { $pull: { savedMovies: card } }, // Используем $pull для удаления movieId
     { new: true, runValidators: true }
   )
     .then((updatedUser) => {

@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     select: false,
   },
   savedMovies: {
-    type: [Number],
+    type: [mongoose.Schema.Types.Mixed],
     default: [],
   },
 });
